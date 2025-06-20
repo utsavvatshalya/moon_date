@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phantom Moon | A Haunting Lunar Experience</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=MedievalSharp&display=swap');
+        
+        :root {
+            --moon-glow: radial-gradient(circle at center, 
+                rgba(178, 204, 255, 0.9) 0%, 
+                rgba(122, 160, 255, 0.5) 40%, 
+                transparent 80%);
+            --blood-red: #8a0303;
+            --ghost-blue: #b8e1ff;
+        }
+        
+        body {
+            font-family: 'MedievalSharp', cursive;
+            background: 
+                linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%),
+                url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            background-blend-mode: overlay;
+            color: var(--ghost-blue);
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Cosmic Stars Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, transparent 40%, rgba(255,255,255,0.1) 100%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><filter id="stars"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0"/></filter><rect width="100%" height="100%" filter="url(%23stars)" opacity="0.8"/></svg>');
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: -1;
+            animation: stars-pulse 15s infinite alternate;
+        }
+        
+        @keyframes stars-pulse {
+            0% { opacity: 0.5; }
+            100% { opacity: 0.9; }
+        }
+        
+        /* Ghostly Fog */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><filter id="fog"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="5"/><feDisplacementMap in="SourceGraphic" scale="15"/></filter><rect width="100%" height="100%" filter="url(%23fog)" opacity="0.15"/></svg>');
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: -1;
+            animation: fog-move 60s linear infinite;
+        }
+        
+        @keyframes fog-move {
+            0% { background-position: 0 0; }
+            100% { background-position: 100% 100%; }
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        h1 {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 3rem;
+            margin: 1rem 0;
+            text-shadow: 0 0 15px rgba(178, 204, 255, 0.7);
+            letter-spacing: 2px;
+            background: linear-gradient(to right, #e6e6fa, #b8e1ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+        
+        h1::after {
+            content: '✧';
+            position: absolute;
+            right: -10px;
+            top: -15px;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .subtitle {
+            font-style: italic;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            text-shadow: 0 0 5px rgba(178, 204, 255, 0.5);
+        }
+        
+        .moon-stage {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 3rem auto;
+            filter: 
+                drop-shadow(0 0 20px rgba(122, 160, 255, 0.3))
+                drop-shadow(0 0 40px rgba(70, 130, 255, 0.2));
+            animation: moon-float 8s ease-in-out infinite;
+        }
+        
+        @keyframes moon-float {
+            0%, 100% { transform: translateY(0) rotate(1deg); }
+            50% { transform: translateY(-15px) rotate(-1deg); }
+        }
+        
+        .moon {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: 
+                url('https://svs.gsfc.nasa.gov/vis/a000000/a004600/a004675/lroc_color_poles_4k.jpg'),
+                var(--moon-glow);
+            background-size: 180%;
+            background-position: center;
+            background-blend-mode: overlay;
+            box-shadow: 
+                inset 0 0 50px rgba(0, 0, 50, 0.8),
+                inset 0 0 100px rgba(0, 0, 100, 0.6);
+            overflow: hidden;
+        }
+        
+        .phase-mask {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 5, 30, 0.9);
+            border-radius: 50%;
+            mix-blend-mode: multiply;
+            transition: clip-path 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .controls {
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        input[type="date"] {
+            padding: 12px;
+            border: 1px solid var(--blood-red);
+            border-radius: 8px;
+            background: rgba(30, 5, 10, 0.7);
+            color: #ffd7d7;
+            font-size: 1rem;
+            font-family: 'MedievalSharp';
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        input[type="date"]:focus {
+            outline: none;
+            box-shadow: 0 0 10px var(--blood-red);
+        }
+        
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.5) sepia(1) saturate(5) hue-rotate(320deg);
+            cursor: pointer;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #3a012a, #8a0303);
+            color: #ffd7d7;
+            border: 1px solid #5a012a;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: 'Cinzel Decorative';
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(138, 3, 3, 0.4);
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(138, 3, 3, 0.6);
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent 45%,
+                rgba(255, 215, 215, 0.2) 50%,
+                transparent 55%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+        
+        .moon-info {
+            background: rgba(10, 5, 30, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid rgba(122, 160, 255, 0.2);
+            box-shadow: 
+                inset 0 0 20px rgba(122, 160, 255, 0.1),
+                0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .moon-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--ghost-blue), transparent);
+        }
+        
+        .phase-name {
+            font-family: 'Cinzel Decorative';
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: #ffd7d7;
+            text-shadow: 0 0 10px var(--blood-red);
+        }
+        
+        .phase-desc {
+            font-style: italic;
+            opacity: 0.9;
+            margin: 1rem 0;
+        }
+        
+        .spirit-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .orb {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(184, 225, 255, 0.6);
+            box-shadow: 
+                0 0 10px 2px rgba(184, 225, 255, 0.4),
+                0 0 20px 5px rgba(122, 160, 255, 0.3);
+            animation: float-orb linear infinite;
+        }
+        
+        @keyframes float-orb {
+            0% { 
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { 
+                transform: translateY(-100vh) translateX(20px);
+                opacity: 0;
+            }
+        }
+        
+        .whisper {
+            position: absolute;
+            font-size: 0.9rem;
+            opacity: 0;
+            animation: whisper-fade 15s infinite;
+            text-shadow: 0 0 5px var(--ghost-blue);
+        }
+        
+        @keyframes whisper-fade {
+            0%, 100% { opacity: 0; transform: translateY(0); }
+            10%, 90% { opacity: 0.1; }
+            50% { opacity: 0.3; transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="spirit-orbs" id="orbs"></div>
+    
+    <div class="container">
+        <h1>Phantom Moon</h1>
+        <p class="subtitle">Where lunar whispers reveal forgotten truths</p>
+        
+        <div class="controls">
+            <input type="date" id="datePicker">
+            <button onclick="updateMoon()">Invoke the Moon</button>
+        </div>
+        
+        <div class="moon-stage">
+            <div class="moon" id="moon"></div>
+            <div class="phase-mask" id="phaseMask"></div>
+        </div>
+        
+        <div class="moon-info" id="moonInfo">
+            <div class="phase-name" id="phaseName">Full Moon</div>
+            <p class="phase-desc" id="phaseDesc">When the veil between worlds is thinnest...</p>
+            <div id="phaseDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        // Create spirit orbs
+        const orbsContainer = document.getElementById('orbs');
+        for (let i = 0; i < 15; i++) {
+            createOrb();
+            setInterval(createOrb, 3000);
+        }
+        
+        function createOrb() {
+            const orb = document.createElement('div');
+            orb.classList.add('orb');
+            orb.style.left = `${Math.random() * 100}%`;
+            orb.style.top = `${100 + Math.random() * 10}%`;
+            orb.style.width = `${5 + Math.random() * 8}px`;
+            orb.style.height = orb.style.width;
+            orb.style.opacity = 0.3 + Math.random() * 0.5;
+            orb.style.setProperty('--duration', `${10 + Math.random() * 20}s`);
+            orb.style.animation = `float-orb ${15 + Math.random() * 15}s linear infinite`;
+            orbsContainer.appendChild(orb);
+            
+            setTimeout(() => {
+                orb.remove();
+            }, 30000);
+        }
+        
+        // Create whispering text
+        const whispers = [
+            "The moon remembers...",
+            "They speak through the craters...",
+            "Beware the waning crescent...",
+            "A blood moon rises...",
+            "The tides whisper secrets...",
+            "Lunar magic awakens...",
+            "The full moon sees all..."
+        ];
+        
+        function createWhisper() {
+            const whisper = document.createElement('div');
+            whisper.classList.add('whisper');
+            whisper.textContent = whispers[Math.floor(Math.random() * whispers.length)];
+            whisper.style.left = `${10 + Math.random() * 80}%`;
+            whisper.style.top = `${10 + Math.random() * 80}%`;
+            whisper.style.animationDelay = `${Math.random() * 15}s`;
+            document.body.appendChild(whisper);
+            
+            setTimeout(() => {
+                whisper.remove();
+            }, 15000);
+        }
+        
+        setInterval(createWhisper, 5000);
+        
+        // Initialize with current date
+        document.getElementById('datePicker').valueAsDate = new Date();
+        updateMoon();
+        
+        function updateMoon() {
+            const dateString = document.getElementById('datePicker').value;
+            if (!dateString) return;
+            
+            const date = new Date(dateString);
+            const phase = calculateMoonPhase(date);
+            
+            renderMoonPhase(phase);
+            updateMoonInfo(date, phase);
+            
+            // Play ghostly sound on update
+            const whisperSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-ghostly-whisper-289.mp3');
+            whisperSound.volume = 0.3;
+            whisperSound.play().catch(e => console.log("Audio playback blocked"));
+        }
+        
+        function calculateMoonPhase(date) {
+            const lunarCycle = 29.530588853;
+            const knownNewMoon = new Date(2000, 0, 6, 12, 24, 0);
+            const daysSince = (date - knownNewMoon) / (1000 * 60 * 60 * 24);
+            return ((daysSince % lunarCycle) / lunarCycle + 1) % 1;
+        }
+        
+        function renderMoonPhase(phase) {
+            const mask = document.getElementById('phaseMask');
+            const illumination = Math.sin(phase * Math.PI);
+            
+            if (phase < 0.5) {
+                const xOffset = 50 - (illumination * 50);
+                mask.style.clipPath = `ellipse(50% 50% at ${xOffset}% 50%)`;
+            } else {
+                const xOffset = 50 + ((1 - illumination) * 50);
+                mask.style.clipPath = `ellipse(50% 50% at ${xOffset}% 50%)`;
+            }
+            
+            // Dynamic glow
+            document.documentElement.style.setProperty(
+                '--moon-glow', 
+                `radial-gradient(circle at ${phase * 100}% 50%, 
+                 rgba(178, 204, 255, ${0.3 + illumination * 0.6}) 0%, 
+                 rgba(122, 160, 255, ${0.2 + illumination * 0.4}) 40%, 
+                 transparent 80%)`
+            );
+            
+            // Blood effect for full moon
+            if (phase > 0.48 && phase < 0.52) {
+                document.getElementById('moon').style.filter = 'hue-rotate(-30deg) brightness(1.1)';
+            } else {
+                document.getElementById('moon').style.filter = '';
+            }
+        }
+        
+        function updateMoonInfo(date, phase) {
+            const phaseData = [
+                { 
+                    name: "New Moon", 
+                    emoji: "🌑", 
+                    desc: "The darkest night... when spirits walk unseen",
+                    effect: "A time for dark rituals and new beginnings"
+                },
+                { 
+                    name: "Waxing Crescent", 
+                    emoji: "🌒", 
+                    desc: "The first silver sliver cuts through the veil",
+                    effect: "Revelations come in fragments"
+                },
+                { 
+                    name: "First Quarter", 
+                    emoji: "🌓", 
+                    desc: "The moon's eye opens halfway",
+                    effect: "Secrets begin to surface"
+                },
+                { 
+                    name: "Waxing Gibbous", 
+                    emoji: "🌔", 
+                    desc: "The swelling light reveals what was hidden",
+                    effect: "The dead grow restless"
+                },
+                { 
+                    name: "Full Moon", 
+                    emoji: "🌕", 
+                    desc: "The spectral orb reigns supreme",
+                    effect: "All magic is amplified tonight"
+                },
+                { 
+                    name: "Waning Gibbous", 
+                    emoji: "🌖", 
+                    desc: "The light begins its retreat",
+                    effect: "Ghosts cling to fading luminescence"
+                },
+                { 
+                    name: "Last Quarter", 
+                    emoji: "🌗", 
+                    desc: "Half in light, half in shadow",
+                    effect: "The veil thins between worlds"
+                },
+                { 
+                    name: "Waning Crescent", 
+                    emoji: "🌘", 
+                    desc: "A dying whisper of moonlight",
+                    effect: "Final messages from beyond"
+                }
+            ];
+            
+            const phaseIndex = Math.floor(phase * 8) % 8;
+            const illumination = Math.round(illumination * 100);
+            const age = Math.round(phase * 29.53);
+            
+            document.getElementById('phaseName').innerHTML = `
+                ${phaseData[phaseIndex].emoji} ${phaseData[phaseIndex].name}
+            `;
+            
+            document.getElementById('phaseDesc').textContent = phaseData[phaseIndex].desc;
+            
+            document.getElementById('phaseDetails').innerHTML = `
+                <p><strong>${date.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                })}</strong></p>
+                <p>${phaseData[phaseIndex].effect}</p>
+                <p>Illumination: ${illumination}% | Moon Age: ${age} days</p>
+            `;
+            
+            // Change background hue based on phase
+            const hueRotate = (phase * 360) % 360;
+            document.body.style.background = `
+                linear-gradient(135deg, 
+                    hsl(270, 60%, ${5 + phase * 5}%) 0%, 
+                    hsl(${270 + hueRotate/12}, 70%, ${3 + phase * 3}%) 50%, 
+                    hsl(240, 50%, ${5 + (1-phase) * 5}%) 100%),
+                url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')`;
+        }
+    </script>
+</body>
+</html>
